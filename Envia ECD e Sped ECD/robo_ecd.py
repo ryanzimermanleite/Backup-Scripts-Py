@@ -599,27 +599,31 @@ def ecd_normal(window, values, codigo):
     time.sleep(5)
 
     if find_img('grupo_contas_normal.png', conf=0.9):
+
         time.sleep(1)
-        p.hotkey('alt', 'n')  #
+        p.hotkey('alt', 'n')
     time.sleep(3)
 
     p.hotkey('alt', 'o')
 
-    while not find_img('validacao.png', conf=0.9):
+    time.sleep(3)
+
+    if find_img('validacao.png', conf=0.9):
         time.sleep(0.5)
-
-    p.hotkey('alt', 's')
-
+        p.hotkey('alt', 's')
     time.sleep(1)
+
     while not find_img('final_exportacao2.png', conf=0.9):
         time.sleep(0.5)
     p.press('enter')
-    time.sleep(1)
+    time.sleep(1)#
 
     window['-Mensagens-'].update('ECD Normal Finalizada!!')
     sped_normal('normal', codigo)
-##
+#
 def sped_normal(tipo, codigo):
+    print('entrou sped')
+
     click_img('sped_icone.png', conf=0.9)
 
     while not find_img('sped_titulo.png', conf=0.9):
@@ -627,7 +631,7 @@ def sped_normal(tipo, codigo):
         click_img('sped_icone.png', conf=0.9)
         time.sleep(1)
 
-    while not find_img('sped_importar_escrituracao.png', conf=0.9):
+    while not find_img('sped_importar_escrituracao.png', conf=0.9):#
         time.sleep(0.5)
         click_img('sped_icone_importar.png', conf=0.9)
 
@@ -725,8 +729,7 @@ def extrai_data_nome_txt(arquivo, codigo):
 
     click_img('dp_contabil.png', conf=0.9, clicks=2)
 
-    while not find_img('2022.png', conf=0.9):
-        time.sleep(0.5)
+    time.sleep(3)
 
     p.press('tab')
     time.sleep(0.5)
@@ -818,57 +821,63 @@ def extrai_data_nome_txt(arquivo, codigo):
     time.sleep(0.5)
     click_img('salvar.png', conf=0.9)
     time.sleep(1)
-    print('aeeeeeeeeeeeeeeeeeee')
+
     click_img('passo_a_passo2.png', conf=0.9)
     time.sleep(1)
     click_img('botao_validar.png', conf=0.9)
     while not find_img('leitor_pdf.png', conf=0.9):
         time.sleep(0.5)
+    data = data + 1
+
 
     if find_img('validar_erro.png', conf=0.9):
-        p.press('enter')
-        time.sleep(1)
-        click_img('fechar.png', conf=0.9)
-        time.sleep(1)
-        click_img('escrituracao.png', conf=0.9)###
+        salvar_copia(codigo, data, 'Erro')
+    elif find_img('finalizado_ok.png', conf=0.9):
+        salvar_copia(codigo, data, 'Sucesso')
+
+def salvar_copia(codigo, data, status):
+    p.press('enter')
+    time.sleep(1)
+    click_img('fechar.png', conf=0.9)
+    time.sleep(1)
+    click_img('escrituracao.png', conf=0.9)  ###
+    time.sleep(0.5)
+    click_img('gerar_copia.png', conf=0.9)
+    while not find_img('titulo_seguranca.png', conf=0.9):
         time.sleep(0.5)
-        click_img('gerar_copia.png', conf=0.9)
-        while not find_img('titulo_seguranca.png', conf=0.9):
-            time.sleep(0.5)
-        p.press('tab', presses=4, interval=0.2)
-        time.sleep(0.5)
+    p.press('tab', presses=4, interval=0.2)
+    time.sleep(0.5)
+    p.press('down')
+    time.sleep(0.5)
+    p.press('up', presses=15)
+    time.sleep(0.5)
+    while not find_img('comum.png', conf=0.9):
+        time.sleep(0.2)  #
         p.press('down')
+    click_img('comum2.png', conf=0.9)  #
+    while not find_img('img_ecd.png', conf=0.9):
         time.sleep(0.5)
-        p.press('up', presses=15)
-        time.sleep(0.5)
-        while not find_img('comum.png', conf=0.9):
-            time.sleep(0.2)  #
-            p.press('down')
-        click_img('comum2.png', conf=0.9)  #
-        while not find_img('img_ecd.png', conf=0.9):
-            time.sleep(0.5)
-        click_img('img_ecd.png', conf=0.9, clicks=2)
+    click_img('img_ecd.png', conf=0.9, clicks=2)
 
-        time.sleep(2)
-        time.sleep(0.5)
-        click_img('pasta_copia.png', conf=0.9, clicks=2)
+    time.sleep(2)
+    time.sleep(0.5)
+    click_img('pasta_copia.png', conf=0.9, clicks=2)
 
-        while not find_img('ecd_robo3.png', conf=0.9):##
-            print('aaaaaa')
-            time.sleep(0.5)
-
+    while not find_img('ecd_robo3.png', conf=0.9):  ##
+        print('aaaaaa')
         time.sleep(0.5)
-        p.press('tab')
-        time.sleep(0.5)#
-        data = data + 1
-        pyperclip.copy('ECD ' + codigo + ' - ' + str(data))
-        time.sleep(0.5)
-        p.hotkey('ctrl', 'v')
-        time.sleep(0.5)
-        click_img('gravar.png', conf=0.9)
 
+    time.sleep(0.5)
+    p.press('tab')
+    time.sleep(0.5)  #
 
-    print('fim!!!')###
+    pyperclip.copy('ECD ' + codigo + ' - Competência ' + str(data) + ' ' + status)
+    time.sleep(0.5)
+    p.hotkey('ctrl', 'v')
+    time.sleep(0.5)
+    click_img('gravar.png', conf=0.9)
+
+    print('fim!!!')
 @barra_de_status
 def run(window, values):
     if values['-normal-'] == False and values['-retificar-'] == False:
