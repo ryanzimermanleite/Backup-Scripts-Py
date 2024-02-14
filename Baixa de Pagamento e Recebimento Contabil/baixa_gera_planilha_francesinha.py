@@ -395,7 +395,7 @@ def escreve_header(codigo, nome_excel):
         alert(text=f'Planilha de notas não encontradas, sem dados.\n\nNão foi gerada!.')
 
 sg.theme('GrayGrayGray')
-bancos2 = ['Banco Neutro - 0', 'Banco Caixa - 5', 'Banco Itaú - 21', 'Santander - 1090']
+bancos2 = ['Banco Neutro - 0', 'Banco Caixa - 5', 'Banco Itaú - 21', 'Santander - 1090', 'Banco - 386', 'Banco - 1060']
 modelo = ['Veiga & Postal', 'Druck Chemie', 'LockPipe']
 layout = [
 
